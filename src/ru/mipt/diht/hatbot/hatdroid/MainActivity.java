@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.http.HttpResponse;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity implements OnInitListener {
     private TextView explanationView;
     private JSONObject wordId;
     private String word = "";
+    private Button good, bad, blame, getWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,14 @@ public class MainActivity extends Activity implements OnInitListener {
         tts = new TextToSpeech(this, this);
         wordView = (TextView) findViewById(R.id.wordView);
         explanationView = (TextView) findViewById(R.id.explanationView);
+        good = (Button) findViewById(R.id.button2);
+        bad = (Button) findViewById(R.id.button3);
+        blame = (Button) findViewById(R.id.button4);
+        getWord = (Button) findViewById(R.id.button5);
+        good.setClickable(false);
+        bad.setClickable(false);
+        blame.setClickable(false);
+        getWord.setClickable(false);
     }
 
     public void generate(View v) {
@@ -69,7 +79,13 @@ public class MainActivity extends Activity implements OnInitListener {
     }
 
     public void showWord(View v) {
-        wordView.setText(word);
+        if (getWord.isClickable()) {
+            wordView.setText(word);
+            good.setClickable(true);
+            bad.setClickable(true);
+            blame.setClickable(true);
+            getWord.setClickable(false);
+        }
     }
 
     private void report(String ans) {
@@ -96,42 +112,54 @@ public class MainActivity extends Activity implements OnInitListener {
     }
 
     public void sendSuccess(View v) {
+        good.setClickable(false);
+        bad.setClickable(false);
+        blame.setClickable(false);
+        if (good.isClickable()) {
+            Thread t = new Thread() {
 
-        Thread t = new Thread() {
+                @Override
+                public void run() {
+                    report("SUCCESS");
+                }
 
-            @Override
-            public void run() {
-                report("SUCCESS");
-            }
-
-        };
-        t.start();
+            };
+            t.start();
+        }
     }
 
     public void sendFail(View v) {
+        good.setClickable(false);
+        bad.setClickable(false);
+        blame.setClickable(false);
+        if (bad.isClickable()) {
+            Thread t = new Thread() {
 
-        Thread t = new Thread() {
+                @Override
+                public void run() {
+                    report("FAIL");
+                }
 
-            @Override
-            public void run() {
-                report("FAIL");
-            }
-
-        };
-        t.start();
+            };
+            t.start();
+        }
     }
 
     public void sendBlame(View v) {
+        good.setClickable(false);
+        bad.setClickable(false);
+        blame.setClickable(false);
+        if (blame.isClickable()) {
+            Thread t = new Thread() {
 
-        Thread t = new Thread() {
+                @Override
+                public void run() {
+                    report("BLAME");
+                }
 
-            @Override
-            public void run() {
-                report("BLAME");
-            }
-
-        };
-        t.start();
+            };
+            t.start();
+        }
     }
 
     private class TitleTask extends AsyncTask<String, Integer, String> {
@@ -193,6 +221,7 @@ public class MainActivity extends Activity implements OnInitListener {
                     }
                 }
                 wordId = json.getJSONObject("id");
+                getWord.setClickable(true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

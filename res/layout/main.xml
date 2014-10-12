@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/button2"
         android:layout_alignLeft="@+id/button2"
-        android:layout_alignRight="@+id/button3" />
+        android:layout_alignRight="@+id/button3" android:layout_below="@+id/button5"/>
 
     <TextView
         android:id="@+id/explanationView"
@@ -61,16 +61,15 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button1"
         android:layout_alignRight="@+id/button1"
-        android:layout_below="@+id/button1" />
+        android:layout_above="@id/button5" android:layout_below="@+id/button1"/>
 
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/explanationView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
         android:onClick="showWord"
-        android:text="Показать слово" />
+        android:text="Показать слово"
+        android:layout_toStartOf="@+id/button3" android:layout_toLeftOf="@+id/button3"
+        android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
