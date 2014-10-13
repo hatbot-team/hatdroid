@@ -12,21 +12,20 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
         android:onClick="sendBlame"
-        android:text="совсем не то" />
+        android:text="Бред"
+        android:layout_toRightOf="@+id/button2"
+        android:layout_toLeftOf="@+id/button3"
+        android:layout_centerHorizontal="true" android:layout_alignParentBottom="true"/>
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button3"
-        android:layout_alignBottom="@+id/button3"
-        android:layout_alignLeft="@+id/button1"
         android:onClick="sendSuccess"
-        android:text="понятно" />
+        android:text="Понятно"
+        android:layout_alignParentBottom="true" android:layout_alignLeft="@+id/explanationView"
+        android:layout_alignStart="@+id/explanationView"/>
 
     <Button
         android:id="@+id/button1"
@@ -42,13 +41,13 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button4"
-        android:layout_alignRight="@+id/button1"
         android:onClick="sendFail"
-        android:text="плохо" />
+        android:text="Плохо" android:layout_alignBaseline="@+id/button4" android:layout_alignBottom="@+id/button4"
+        android:layout_alignRight="@+id/explanationView" android:layout_alignEnd="@+id/explanationView"/>
 
     <TextView
         android:id="@+id/wordView"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button2"
@@ -57,6 +56,7 @@
 
     <TextView
         android:id="@+id/explanationView"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button1"
@@ -68,8 +68,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="showWord"
-        android:text="Показать слово"
-        android:layout_toStartOf="@+id/button3" android:layout_toLeftOf="@+id/button3"
-        android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+        android:text="Слово"
+        android:layout_centerVertical="true" android:layout_alignLeft="@+id/explanationView"
+        android:layout_alignStart="@+id/explanationView" android:layout_alignRight="@+id/button2"
+        android:layout_alignEnd="@+id/button2"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:layout_alignRight="@+id/wordView"
+            android:layout_alignEnd="@+id/wordView" android:layout_alignBottom="@+id/button5"
+            android:layout_toRightOf="@+id/button5" android:layout_toEndOf="@+id/button5"
+            android:text="Другое объяснение" android:onClick="getAnotherExplanation"
+            android:layout_alignTop="@+id/button5"/>
 
 </RelativeLayout>
