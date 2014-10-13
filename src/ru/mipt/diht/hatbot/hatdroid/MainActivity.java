@@ -1,23 +1,22 @@
 package ru.mipt.diht.hatbot.hatdroid;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -27,14 +26,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
-import android.net.ConnectivityManager;
-import android.content.Context;
-import android.net.NetworkInfo;
 
 public class MainActivity extends Activity implements OnInitListener {
 
@@ -159,13 +152,7 @@ public class MainActivity extends Activity implements OnInitListener {
             if (response.getStatusLine().getStatusCode() == 200) {
                 return true;
             }
-        } catch (UnsupportedEncodingException e) {
-            Log.wtf("report", e);
-        } catch (ClientProtocolException e) {
-            Log.wtf("report", e);
-        } catch (IOException e) {
-            Log.wtf("report", e);
-        } catch (JSONException e) {
+        } catch (JSONException | IOException e) {
             Log.wtf("report", e);
         }
         return false;
@@ -304,9 +291,8 @@ public class MainActivity extends Activity implements OnInitListener {
             {
                 NetworkInfo[] info = connectivity.getAllNetworkInfo();
                 if (info != null)
-                    for (int i = 0; i < info.length; i++)
-                        if (info[i].getState() == NetworkInfo.State.CONNECTED)
-                        {
+                    for (NetworkInfo anInfo : info)
+                        if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
                             return true;
                         }
 
