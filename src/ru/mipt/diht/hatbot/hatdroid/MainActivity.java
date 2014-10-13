@@ -1,11 +1,15 @@
 package ru.mipt.diht.hatbot.hatdroid;
 
 import android.app.Activity;
+<<<<<<< Updated upstream
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+=======
+import android.os.*;
+>>>>>>> Stashed changes
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
@@ -15,9 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -38,6 +44,7 @@ public class MainActivity extends Activity implements OnInitListener {
     private JSONObject wordId;
     private String word = "";
     private Button good, bad, blame, getWord, getExplanation;
+    private Handler h;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,27 +63,36 @@ public class MainActivity extends Activity implements OnInitListener {
         blame.setClickable(false);
         getWord.setClickable(false);
         getExplanation.setClickable(false);
+        h = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Ваш ответ успешно отправлен!",
+                        Toast.LENGTH_SHORT).show();
+            };
+        };
     }
 
-    public void showToast(final String toast)
+    public void showToast(final String toast, final Context context)
     {
         runOnUiThread(new Runnable() {
 
             @Override
             public void run()
             {
-                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private boolean internetCheck() {
         ConnectionDetector connectionDetector = new ConnectionDetector(getApplicationContext());
+        final Context context = this;
         if (connectionDetector.isConnectingToInternet()) {
             return true;
         }
         else {
-            showToast("Нет подключения к интернету!");
+            showToast("Нет подключения к интернету!", context);
             return false;
         }
     }
@@ -137,7 +153,7 @@ public class MainActivity extends Activity implements OnInitListener {
         }
     }
 
-    private boolean report(String ans) {
+    private void report(String ans) {
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(host + "/statistics/update");
         try {
@@ -149,13 +165,12 @@ public class MainActivity extends Activity implements OnInitListener {
             post.setEntity(se);
             HttpResponse response = client.execute(post);
             Log.d("resp", EntityUtils.toString(response.getEntity()));
-            if (response.getStatusLine().getStatusCode() == 200) {
-                return true;
+            if (response.getEntity() != null && !response.getEntity().equals("")) {
+                h.sendEmptyMessage(0);
             }
         } catch (JSONException | IOException e) {
             Log.wtf("report", e);
         }
-        return false;
     }
 
     public void sendSuccess(View v) {
@@ -165,9 +180,7 @@ public class MainActivity extends Activity implements OnInitListener {
 
                 @Override
                 public void run() {
-                    if (report("SUCCESS")) {
-                        showToast("Ваш ответ отправлен, спасибо!");
-                    }
+                    report("SUCCESS");
                 }
 
             };
@@ -182,9 +195,7 @@ public class MainActivity extends Activity implements OnInitListener {
 
                 @Override
                 public void run() {
-                    if (report("FAIL")) {
-                        showToast("Ваш ответ отправлен, спасибо!");
-                    }
+                    report("FAIL");
                 }
 
             };
@@ -199,9 +210,7 @@ public class MainActivity extends Activity implements OnInitListener {
 
                 @Override
                 public void run() {
-                    if (report("BLAME")) {
-                        showToast("Ваш ответ отправлен, спасибо!");
-                    }
+                    report("BLAME");
                 }
 
             };
