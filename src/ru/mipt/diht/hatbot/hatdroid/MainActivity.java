@@ -1,15 +1,13 @@
 package ru.mipt.diht.hatbot.hatdroid;
 
 import android.app.Activity;
-<<<<<<< Updated upstream
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-=======
 import android.os.*;
->>>>>>> Stashed changes
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
@@ -19,11 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -73,6 +69,12 @@ public class MainActivity extends Activity implements OnInitListener {
         };
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.main);
+    }
+
     public void showToast(final String toast, final Context context)
     {
         runOnUiThread(new Runnable() {
@@ -106,6 +108,7 @@ public class MainActivity extends Activity implements OnInitListener {
 
     public void generate(View v) {
         wordView.setText("");
+        getExplanation.setClickable(true);
         if (internetCheck()) {
             (new TitleTask()).execute(host + "/random_word");
         }
