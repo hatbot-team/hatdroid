@@ -34,7 +34,7 @@ import java.util.Locale;
 public class MainActivity extends Activity implements OnInitListener {
 
     private TextToSpeech tts;
-    private String host = "http://93.175.2.4:1752";
+    private String host = "http://hatbot.me";
     private TextView wordView;
     private TextView explanationView;
     private JSONObject wordId;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements OnInitListener {
                         getApplicationContext(),
                         "Ваш ответ успешно отправлен!",
                         Toast.LENGTH_SHORT).show();
-            };
+            }
         };
     }
 
@@ -167,8 +167,9 @@ public class MainActivity extends Activity implements OnInitListener {
             post.addHeader("content-type", "application/json");
             post.setEntity(se);
             HttpResponse response = client.execute(post);
-            Log.d("resp", EntityUtils.toString(response.getEntity()));
-            if (response.getEntity() != null && !response.getEntity().equals("")) {
+            final String entity = EntityUtils.toString(response.getEntity());
+            Log.d("resp", entity);
+            if (entity != null && entity.length() != 0) {
                 h.sendEmptyMessage(0);
             }
         } catch (JSONException | IOException e) {
